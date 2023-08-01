@@ -53,6 +53,7 @@ void enqueue(int x){
 
         if(!head){
             head=new;
+            printf("Element %d is added to the queue successfully",x);
         }
         else{
             struct node *temp = head;
