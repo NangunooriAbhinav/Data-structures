@@ -8,119 +8,24 @@ struct node{
     struct node *right;
 };
 
-struct queue{
-    struct node *inqueue;
-    struct queue *next;
-};
-
-struct queue *head = NULL;
 struct node *root = NULL;
 
-void display_inorder(struct node *root){
+int left,right;
 
-    if (root == NULL){
-        return;
-    }
+// creatring a newnode
+struct node *newnode(int data);
 
-    display_inorder(root->left);
+//display inorder preorder and postorder
+void display_inorder(struct node *root);
+void display_preorder(struct node *root);
+void display_postorder(struct node *root);
 
-    printf("%d", root->data);
 
-    display_inorder(root->right);
-}
+//calculate height
+int height_oftree(struct node *root);
 
-void display_preorder(struct node *root){
-    
-    if (root == NULL){
-        return;
-    }
 
-    printf("%d", root->data);
-
-    display_preorder(root->left);
-    display_preorder(root->right);
-}
-
-void display_postorder(struct node *root){
-
-    if (root == NULL){
-        return;
-    }
-
-    display_postorder(root->left);
-
-    display_postorder(root->right);
-
-    printf("%d", root->data);
-}
-
-void enqueue(struct node *root){
-
-    struct queue *new = malloc(sizeof(struct queue));
-
-    new->inqueue = root;
-
-    new->next = NULL;
-
-    if(!head){
-        head=new;
-    }
-    
-    else{
-        struct queue *temp = head;
-        while(temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = new;
-    }
-
-}
-
-void dequeue(){
-    head=head->next;
-}
-
-void display_levelorder(struct node *temp){
-
-    int i=1,branchno=0;
-
-    enqueue(temp);
-    
-    while(temp){
-
-        printf("%d ",temp->data);
-        
-        if(i == pow(2,branchno)){
-            printf("\n");
-            branchno++;
-            i=0;
-        }
-
-        i++;
-
-        if(temp->left != NULL){
-            enqueue(temp->left);
-        }
-
-        if(temp->right != NULL){
-            enqueue(temp->right);
-        }
-
-        dequeue();
-
-        temp=head->inqueue;
-    }
-}
-struct node *newnode(int data){
-    struct node *newnode = malloc(sizeof(struct node));
-
-    newnode->data = data;
-
-    newnode->left = NULL;
-    newnode->right = NULL;
-}
-
-void main(){
+int main(){
 
     struct node *root = newnode(1);
 
@@ -151,5 +56,73 @@ void main(){
     printf("\n");
     display_postorder(root);
     printf("\n");
-    display_levelorder(root);
+    printf("%d",height_oftree(root));
 }
+
+struct node *newnode(int data){
+    struct node *newnode = malloc(sizeof(struct node));
+
+    newnode->data = data;
+
+    newnode->left = NULL;
+    newnode->right = NULL;
+
+    return newnode;
+}
+
+void display_inorder(struct node *root){
+
+    if (root == NULL){
+        return;
+    }
+
+    display_inorder(root->left);
+
+    printf("%d ", root->data);
+
+    display_inorder(root->right);
+}
+
+void display_preorder(struct node *root){
+    
+    if (root == NULL){
+        return;
+    }
+
+    printf("%d ", root->data);
+
+    display_preorder(root->left);
+    display_preorder(root->right);
+}
+
+void display_postorder(struct node *root){
+
+    if (root == NULL){
+        return;
+    }
+
+    display_postorder(root->left);
+
+    display_postorder(root->right);
+
+    printf("%d ", root->data);
+}
+
+int height_oftree(struct node *root){
+    if(root == NULL){
+        return 0;
+    }
+    else{
+        left=height_oftree(root->left);
+        right=height_oftree(root->right);
+
+        if(left > right){
+            return left+1;
+        }
+        else{
+            return right+1;
+        }
+    }
+}
+
+
